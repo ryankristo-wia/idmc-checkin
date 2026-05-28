@@ -14,20 +14,13 @@
   --text: #1a1a1a; --muted: #777; --hint: #aaa;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-html, body { height: 100%; }
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: var(--bg); color: var(--text);
-  padding: 20px 16px 60px; font-size: 17px;
-}
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); padding: 20px 16px 60px; font-size: 17px; }
 .app { max-width: 500px; margin: 0 auto; }
 
-/* HEADER */
 .header { text-align: center; margin-bottom: 24px; padding-top: 8px; }
 .logo { font-size: 11px; letter-spacing: 0.15em; color: var(--hint); text-transform: uppercase; margin-bottom: 6px; }
-h1 { font-size: 28px; font-weight: 800; color: var(--text); }
+h1 { font-size: 28px; font-weight: 800; }
 
-/* COUNTERS */
 .counters { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px; }
 .counter { background: var(--card); border-radius: 14px; padding: 16px 6px; text-align: center; border: 1px solid var(--border); }
 .c-lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--hint); margin-bottom: 8px; }
@@ -35,20 +28,13 @@ h1 { font-size: 28px; font-weight: 800; color: var(--text); }
 .c-num.g { color: var(--green); }
 .c-num.a { color: var(--amber); }
 
-/* TABS */
 .tabs { display: flex; gap: 8px; margin-bottom: 14px; }
-.tab {
-  flex: 1; height: 54px; border: 2px solid var(--border);
-  background: var(--card); border-radius: 14px;
-  font-size: 15px; font-weight: 700; color: var(--muted); cursor: pointer;
-}
+.tab { flex: 1; height: 54px; border: 2px solid var(--border); background: var(--card); border-radius: 14px; font-size: 15px; font-weight: 700; color: var(--muted); cursor: pointer; }
 .tab.active { border-color: var(--text); background: var(--text); color: white; }
 
-/* CARD */
 .card { background: var(--card); border-radius: 16px; border: 1px solid var(--border); padding: 20px; margin-bottom: 14px; }
 .card-title { font-size: 15px; font-weight: 700; color: #555; margin-bottom: 14px; }
 
-/* MANUAL */
 .input-row { display: flex; gap: 10px; }
 input[type=text] {
   flex: 1; height: 62px; border: 2px solid var(--border); border-radius: 12px;
@@ -57,31 +43,18 @@ input[type=text] {
 }
 input[type=text]:focus { border-color: var(--text); background: white; }
 input[type=text]::placeholder { font-size: 14px; color: #bbb; letter-spacing: 0; font-family: inherit; }
-.btn-search {
-  height: 62px; padding: 0 22px; background: var(--text); color: white;
-  border: none; border-radius: 12px; font-size: 17px; font-weight: 800; cursor: pointer;
-}
+.btn-search { height: 62px; padding: 0 22px; background: var(--text); color: white; border: none; border-radius: 12px; font-size: 17px; font-weight: 800; cursor: pointer; }
 .btn-search:active { opacity: 0.75; }
 
-/* QR SCANNER */
-.btn-cam {
-  width: 100%; height: 62px; background: var(--text); color: white;
-  border: none; border-radius: 14px; font-size: 17px; font-weight: 700;
-  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;
-}
+.btn-cam { width: 100%; height: 62px; background: var(--text); color: white; border: none; border-radius: 14px; font-size: 17px; font-weight: 700; cursor: pointer; }
 .btn-cam:active { opacity: 0.75; }
 .qr-wrap { position: relative; width: 100%; background: #000; border-radius: 14px; overflow: hidden; margin-bottom: 12px; }
 video { width: 100%; display: block; }
 .qr-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; }
 .qr-frame { width: 58%; aspect-ratio: 1; border: 3px solid white; border-radius: 16px; box-shadow: 0 0 0 9999px rgba(0,0,0,0.5); }
 .qr-hint { font-size: 14px; color: var(--hint); text-align: center; margin-top: 10px; }
-.btn-stop {
-  width: 100%; height: 50px; background: transparent; color: var(--red);
-  border: 2px solid var(--red-border); border-radius: 12px;
-  font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 12px;
-}
+.btn-stop { width: 100%; height: 50px; background: transparent; color: var(--red); border: 2px solid var(--red-border); border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 12px; }
 
-/* RESULT */
 .result { border-radius: 16px; padding: 20px; margin-bottom: 14px; display: none; }
 .result.success { background: var(--green-bg); border: 2px solid var(--green-border); }
 .result.error   { background: var(--red-bg);   border: 2px solid var(--red-border); }
@@ -95,14 +68,9 @@ video { width: 100%; display: block; }
 .ik { color: var(--muted); flex-shrink: 0; }
 .iv { font-weight: 700; text-align: right; word-break: break-word; }
 .badge { display: inline-block; font-size: 13px; padding: 4px 12px; border-radius: 99px; background: #e3f0fc; color: #1a5fa8; font-weight: 700; }
-.btn-checkin {
-  width: 100%; height: 66px; background: var(--green); color: white;
-  border: none; border-radius: 14px; font-size: 19px; font-weight: 800;
-  cursor: pointer; margin-top: 18px;
-}
+.btn-checkin { width: 100%; height: 66px; background: var(--green); color: white; border: none; border-radius: 14px; font-size: 19px; font-weight: 800; cursor: pointer; margin-top: 18px; }
 .btn-checkin:active { filter: brightness(0.88); }
 
-/* RECENT */
 .divider { border: none; border-top: 1px solid var(--border); margin: 22px 0; }
 .recent-lbl { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--hint); margin-bottom: 12px; font-weight: 700; }
 .recent-item { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; background: var(--card); border-radius: 12px; border: 1px solid var(--border); margin-bottom: 8px; gap: 12px; }
@@ -121,9 +89,9 @@ video { width: 100%; display: block; }
   </div>
 
   <div class="counters">
-    <div class="counter"><div class="c-lbl">Total</div><div class="c-num" id="cnt-total">...</div></div>
-    <div class="counter"><div class="c-lbl">Checked In</div><div class="c-num g" id="cnt-in">...</div></div>
-    <div class="counter"><div class="c-lbl">Remaining</div><div class="c-num a" id="cnt-rem">...</div></div>
+    <div class="counter"><div class="c-lbl">Total</div><div class="c-num" id="cnt-total">-</div></div>
+    <div class="counter"><div class="c-lbl">Checked In</div><div class="c-num g" id="cnt-in">-</div></div>
+    <div class="counter"><div class="c-lbl">Remaining</div><div class="c-num a" id="cnt-rem">-</div></div>
   </div>
 
   <div class="tabs">
@@ -150,7 +118,7 @@ video { width: 100%; display: block; }
         <video id="qr-video" autoplay playsinline muted></video>
         <div class="qr-overlay"><div class="qr-frame"></div></div>
       </div>
-      <p class="qr-hint">Arahkan ke QR code tiket — otomatis terdeteksi</p>
+      <p class="qr-hint">Arahkan ke QR code — otomatis terdeteksi</p>
       <canvas id="qr-canvas" style="display:none;"></canvas>
       <button class="btn-stop" onclick="stopCamera()">✕ &nbsp;Tutup Kamera</button>
     </div>
@@ -164,26 +132,72 @@ video { width: 100%; display: block; }
 
 </div>
 <script>
-// ⚠️ GANTI URL INI dengan URL Google Apps Script kamu
+// ⚠️ GANTI dengan URL Google Apps Script kamu
 const API_URL = "https://script.google.com/macros/s/AKfycbylmkwVYen3UE80pBhSwcAa4bpThCPukW_XAbOLoO-zLehC4ercwUlFuIsXF1caL-mkMg/exec";
 
 let recentList = [];
 let scanning = false;
 let stream = null;
+let cbCounter = 0;
 
+// ─── JSONP (bypasses CORS & redirects on mobile) ───────────────────────────
+function apiCall(params) {
+  return new Promise((resolve, reject) => {
+    const cbName = '__cb' + (++cbCounter);
+    const timeout = setTimeout(() => {
+      delete window[cbName];
+      const tag = document.getElementById(cbName);
+      if (tag) tag.remove();
+      reject(new Error('timeout'));
+    }, 15000);
+
+    window[cbName] = function(data) {
+      clearTimeout(timeout);
+      delete window[cbName];
+      const tag = document.getElementById(cbName);
+      if (tag) tag.remove();
+      resolve(data);
+    };
+
+    const p = Object.assign({}, params, { callback: cbName });
+    const url = API_URL + '?' + new URLSearchParams(p);
+    const script = document.createElement('script');
+    script.id = cbName;
+    script.src = url;
+    script.onerror = () => {
+      clearTimeout(timeout);
+      delete window[cbName];
+      script.remove();
+      reject(new Error('network error'));
+    };
+    document.head.appendChild(script);
+  });
+}
+
+// ─── STATS ─────────────────────────────────────────────────────────────────
+async function loadStats() {
+  try {
+    const d = await apiCall({ action: 'stats' });
+    document.getElementById('cnt-total').textContent = d.total.toLocaleString('id');
+    document.getElementById('cnt-in').textContent    = d.checkedIn.toLocaleString('id');
+    document.getElementById('cnt-rem').textContent   = d.remaining.toLocaleString('id');
+  } catch(e) {}
+}
+
+// ─── TABS ──────────────────────────────────────────────────────────────────
 function switchTab(tab) {
   document.getElementById('tab-manual').className = 'tab' + (tab==='manual' ? ' active' : '');
-  document.getElementById('tab-qr').className    = 'tab' + (tab==='qr'     ? ' active' : '');
+  document.getElementById('tab-qr').className     = 'tab' + (tab==='qr'     ? ' active' : '');
   document.getElementById('panel-manual').style.display = tab==='manual' ? 'block' : 'none';
-  document.getElementById('panel-qr').style.display    = tab==='qr'     ? 'block' : 'none';
+  document.getElementById('panel-qr').style.display     = tab==='qr'     ? 'block' : 'none';
   if (tab !== 'qr') stopCamera();
 }
 
+// ─── CAMERA ────────────────────────────────────────────────────────────────
 async function startCamera() {
   try {
     stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } },
-      audio: false
+      video: { facingMode: { ideal: 'environment' } }, audio: false
     });
     const video = document.getElementById('qr-video');
     video.srcObject = stream;
@@ -193,7 +207,7 @@ async function startCamera() {
     scanning = true;
     requestAnimationFrame(scanFrame);
   } catch(err) {
-    alert('Tidak bisa akses kamera.\n\nPastikan:\n1. Buka via https:// (bukan http)\n2. Izinkan kamera saat browser bertanya\n3. Safari: Pengaturan > Safari > Kamera > Izinkan');
+    alert('Tidak bisa akses kamera.\n\nCara izinkan:\n• Safari: Pengaturan > Safari > Kamera > Izinkan\n• Chrome: ketuk ikon kunci di address bar > Kamera > Izinkan\n\nPastikan buka via https://');
   }
 }
 
@@ -211,7 +225,7 @@ function scanFrame() {
   if (video.readyState === video.HAVE_ENOUGH_DATA && video.videoWidth > 0) {
     canvas.width  = video.videoWidth;
     canvas.height = video.videoHeight;
-    const ctx = canvas.getContext('2d');
+    const ctx  = canvas.getContext('2d');
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
     const img  = ctx.getImageData(0, 0, canvas.width, canvas.height);
     const code = jsQR(img.data, img.width, img.height, { inversionAttempts: 'dontInvert' });
@@ -226,21 +240,7 @@ function scanFrame() {
   requestAnimationFrame(scanFrame);
 }
 
-async function apiCall(params) {
-  const url = API_URL + '?' + new URLSearchParams(params);
-  const res  = await fetch(url);
-  return res.json();
-}
-
-async function loadStats() {
-  try {
-    const d = await apiCall({ action: 'stats' });
-    document.getElementById('cnt-total').textContent = d.total.toLocaleString('id');
-    document.getElementById('cnt-in').textContent    = d.checkedIn.toLocaleString('id');
-    document.getElementById('cnt-rem').textContent   = d.remaining.toLocaleString('id');
-  } catch(e) {}
-}
-
+// ─── SEARCH ────────────────────────────────────────────────────────────────
 async function handleSearch() {
   const code = document.getElementById('ticket-input').value.trim().toUpperCase();
   if (!code) return;
@@ -250,7 +250,14 @@ async function handleSearch() {
   box.innerHTML = '<div class="loading">🔍 Mencari...</div>';
   box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
-  const d = await apiCall({ action: 'lookup', code });
+  let d;
+  try {
+    d = await apiCall({ action: 'lookup', code });
+  } catch(e) {
+    box.className = 'result error';
+    box.innerHTML = '<div class="r-title r">⚠️ Gagal terhubung</div><div style="font-size:14px;color:var(--red)">Cek koneksi internet lalu coba lagi.</div>';
+    return;
+  }
 
   if (d.status === 'not_found') {
     box.className = 'result error';
@@ -272,10 +279,20 @@ async function handleSearch() {
     '<button class="btn-checkin" onclick="confirmCheckin(\'' + esc(code) + '\',\'' + esc(d.name) + '\',\'' + esc(d.ticketType) + '\')">✓ Konfirmasi Check-in</button>';
 }
 
+// ─── CHECK-IN ──────────────────────────────────────────────────────────────
 async function confirmCheckin(code, name, ticketType) {
   const box = document.getElementById('result-box');
   box.innerHTML = '<div class="loading">⏳ Memproses...</div>';
-  const d = await apiCall({ action: 'checkin', code });
+
+  let d;
+  try {
+    d = await apiCall({ action: 'checkin', code });
+  } catch(e) {
+    box.className = 'result error';
+    box.innerHTML = '<div class="r-title r">⚠️ Gagal terhubung</div><div style="font-size:14px;color:var(--red)">Cek koneksi internet lalu coba lagi.</div>';
+    return;
+  }
+
   if (d.status === 'success') {
     box.className = 'result success';
     box.innerHTML = '<div class="r-title g">✓ Check-in berhasil!</div>' +
@@ -291,6 +308,7 @@ async function confirmCheckin(code, name, ticketType) {
   }
 }
 
+// ─── HELPERS ───────────────────────────────────────────────────────────────
 function row(k, v) {
   return '<div class="info-row"><span class="ik">' + k + '</span><span class="iv">' + v + '</span></div>';
 }
