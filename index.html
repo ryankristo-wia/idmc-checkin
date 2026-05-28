@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>IDMC Check-in</title>
+<script src="https://unpkg.com/jsqr@1.4.0/dist/jsQR.js"></script>
+<style>
+:root {
+  --green: #1b7a4a; --green-bg: #edf7f1; --green-border: #a8dfc0;
+  --red: #c0392b; --red-bg: #fef0ee; --red-border: #f4b8b0;
+  --amber: #a05c00; --amber-bg: #fef8ec; --amber-border: #f7dfa0;
+  --bg: #f0f0eb; --card: #ffffff; --border: #e0e0da;
+  --text: #1a1a1a; --muted: #777; --hint: #aaa;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg); color: var(--text);
+  padding: 20px 16px 60px; font-size: 17px;
+}
+.app { max-width: 500px; margin: 0 auto; }
+
+/* HEADER */
+.header { text-align: center; margin-bottom: 24px; padding-top: 8px; }
+.logo { font-size: 11px; letter-spacing: 0.15em; color: var(--hint); text-transform: uppercase; margin-bottom: 6px; }
+h1 { font-size: 28px; font-weight: 800; color: var(--text); }
+
+/* COUNTERS */
+.counters { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+.counter { background: var(--card); border-radius: 14px; padding: 16px 6px; text-align: center; border: 1px solid var(--border); }
+.c-lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--hint); margin-bottom: 8px; }
+.c-num { font-size: 26px; font-weight: 800; line-height: 1; }
+.c-num.g { color: var(--green); }
+.c-num.a { color: var(--amber); }
+
+/* TABS */
+.tabs { display: flex; gap: 8px; margin-bottom: 14px; }
+.tab {
+  flex: 1; height: 54px; border: 2px solid var(--border);
+  background: var(--card); border-radius: 14px;
+  font-size: 15px; font-weight: 700; color: var(--muted); cursor: pointer;
+}
+.tab.active { border-color: var(--text); background: var(--text); color: white; }
+
+/* CARD */
+.card { background: var(--card); border-radius: 16px; border: 1px solid var(--border); padding: 20px; margin-bottom: 14px; }
+.card-title { font-size: 15px; font-weight: 700; color: #555; margin-bottom: 14px; }
+
+/* MANUAL */
+.input-row { display: flex; gap: 10px; }
+input[type=text] {
+  flex: 1; height: 62px; border: 2px solid var(--border); border-radius: 12px;
+  padding: 0 16px; font-size: 20px; font-family: monospace; letter-spacing: 0.05em;
+  outline: none; background: #fafafa; color: var(--text);
+}
+input[type=text]:focus { border-color: var(--text); background: white; }
+input[type=text]::placeholder { font-size: 14px; color: #bbb; letter-spacing: 0; font-family: inherit; }
+.btn-search {
+  height: 62px; padding: 0 22px; background: var(--text); color: white;
+  border: none; border-radius: 12px; font-size: 17px; font-weight: 800; cursor: pointer;
+}
+.btn-search:active { opacity: 0.75; }
+
+/* QR SCANNER */
+.btn-cam {
+  width: 100%; height: 62px; background: var(--text); color: white;
+  border: none; border-radius: 14px; font-size: 17px; font-weight: 700;
+  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;
+}
+.btn-cam:active { opacity: 0.75; }
+.qr-wrap { position: relative; width: 100%; background: #000; border-radius: 14px; overflow: hidden; margin-bottom: 12px; }
+video { width: 100%; display: block; }
+.qr-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+.qr-frame { width: 58%; aspect-ratio: 1; border: 3px solid white; border-radius: 16px; box-shadow: 0 0 0 9999px rgba(0,0,0,0.5); }
+.qr-hint { font-size: 14px; color: var(--hint); text-align: center; margin-top: 10px; }
+.btn-stop {
+  width: 100%; height: 50px; background: transparent; color: var(--red);
+  border: 2px solid var(--red-border); border-radius: 12px;
+  font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 12px;
+}
+
+/* RESULT */
+.result { border-radius: 16px; padding: 20px; margin-bottom: 14px; display: none; }
+.result.success { background: var(--green-bg); border: 2px solid var(--green-border); }
+.result.error   { background: var(--red-bg);   border: 2px solid var(--red-border); }
+.result.warning { background: var(--amber-bg); border: 2px solid var(--amber-border); }
+.r-title { font-size: 18px; font-weight: 800; margin-bottom: 14px; }
+.r-title.g { color: var(--green); }
+.r-title.r { color: var(--red); }
+.r-title.a { color: var(--amber); }
+.info-row { display: flex; justify-content: space-between; align-items: flex-start; font-size: 15px; padding: 11px 0; border-bottom: 1px solid rgba(0,0,0,0.07); gap: 12px; }
+.info-row:last-of-type { border: none; }
+.ik { color: var(--muted); flex-shrink: 0; }
+.iv { font-weight: 700; text-align: right; word-break: break-word; }
+.badge { display: inline-block; font-size: 13px; padding: 4px 12px; border-radius: 99px; background: #e3f0fc; color: #1a5fa8; font-weight: 700; }
+.btn-checkin {
+  width: 100%; height: 66px; background: var(--green); color: white;
+  border: none; border-radius: 14px; font-size: 19px; font-weight: 800;
+  cursor: pointer; margin-top: 18px;
+}
+.btn-checkin:active { filter: brightness(0.88); }
+
+/* RECENT */
+.divider { border: none; border-top: 1px solid var(--border); margin: 22px 0; }
+.recent-lbl { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--hint); margin-bottom: 12px; font-weight: 700; }
+.recent-item { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; background: var(--card); border-radius: 12px; border: 1px solid var(--border); margin-bottom: 8px; gap: 12px; }
+.r-name { font-size: 15px; font-weight: 700; }
+.r-code { font-size: 12px; color: var(--hint); font-family: monospace; margin-top: 3px; }
+.r-time { font-size: 13px; color: var(--hint); text-align: right; margin-bottom: 4px; }
+.loading { text-align: center; color: var(--hint); font-size: 15px; padding: 18px; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="header">
+    <div class="logo">Indonesia Digital Marketing Conference</div>
+    <h1>Check-in Portal</h1>
+  </div>
+
+  <div class="counters">
+    <div class="counter"><div class="c-lbl">Total</div><div class="c-num" id="cnt-total">...</div></div>
+    <div class="counter"><div class="c-lbl">Checked In</div><div class="c-num g" id="cnt-in">...</div></div>
+    <div class="counter"><div class="c-lbl">Remaining</div><div class="c-num a" id="cnt-rem">...</div></div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" id="tab-manual" onclick="switchTab('manual')">✏️ Ketik Kode</button>
+    <button class="tab" id="tab-qr" onclick="switchTab('qr')">📷 Scan QR</button>
+  </div>
+
+  <div class="card" id="panel-manual">
+    <div class="card-title">Masukkan kode tiket</div>
+    <div class="input-row">
+      <input type="text" id="ticket-input" placeholder="e.g. 24FC4A48D8"
+        autocomplete="off" spellcheck="false" autocapitalize="characters" />
+      <button class="btn-search" onclick="handleSearch()">Cari</button>
+    </div>
+  </div>
+
+  <div class="card" id="panel-qr" style="display:none;">
+    <div class="card-title">Scan QR Code tiket</div>
+    <div id="cam-off">
+      <button class="btn-cam" onclick="startCamera()">📷 &nbsp;Buka Kamera</button>
+    </div>
+    <div id="cam-on" style="display:none;">
+      <div class="qr-wrap">
+        <video id="qr-video" autoplay playsinline muted></video>
+        <div class="qr-overlay"><div class="qr-frame"></div></div>
+      </div>
+      <p class="qr-hint">Arahkan ke QR code tiket — otomatis terdeteksi</p>
+      <canvas id="qr-canvas" style="display:none;"></canvas>
+      <button class="btn-stop" onclick="stopCamera()">✕ &nbsp;Tutup Kamera</button>
+    </div>
+  </div>
+
+  <div class="result" id="result-box"></div>
+
+  <hr class="divider" />
+  <div class="recent-lbl">Recent Check-ins</div>
+  <div id="recent-list"><div class="loading">Belum ada check-in hari ini</div></div>
+
+</div>
+<script>
+// ⚠️ GANTI URL INI dengan URL Google Apps Script kamu
+const API_URL = "https://script.google.com/macros/s/AKfycbylmkwVYen3UE80pBhSwcAa4bpThCPukW_XAbOLoO-zLehC4ercwUlFuIsXF1caL-mkMg/exec";
+
+let recentList = [];
+let scanning = false;
+let stream = null;
+
+function switchTab(tab) {
+  document.getElementById('tab-manual').className = 'tab' + (tab==='manual' ? ' active' : '');
+  document.getElementById('tab-qr').className    = 'tab' + (tab==='qr'     ? ' active' : '');
+  document.getElementById('panel-manual').style.display = tab==='manual' ? 'block' : 'none';
+  document.getElementById('panel-qr').style.display    = tab==='qr'     ? 'block' : 'none';
+  if (tab !== 'qr') stopCamera();
+}
+
+async function startCamera() {
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } },
+      audio: false
+    });
+    const video = document.getElementById('qr-video');
+    video.srcObject = stream;
+    await video.play();
+    document.getElementById('cam-off').style.display = 'none';
+    document.getElementById('cam-on').style.display  = 'block';
+    scanning = true;
+    requestAnimationFrame(scanFrame);
+  } catch(err) {
+    alert('Tidak bisa akses kamera.\n\nPastikan:\n1. Buka via https:// (bukan http)\n2. Izinkan kamera saat browser bertanya\n3. Safari: Pengaturan > Safari > Kamera > Izinkan');
+  }
+}
+
+function stopCamera() {
+  scanning = false;
+  if (stream) { stream.getTracks().forEach(t => t.stop()); stream = null; }
+  document.getElementById('cam-off').style.display = 'block';
+  document.getElementById('cam-on').style.display  = 'none';
+}
+
+function scanFrame() {
+  if (!scanning) return;
+  const video  = document.getElementById('qr-video');
+  const canvas = document.getElementById('qr-canvas');
+  if (video.readyState === video.HAVE_ENOUGH_DATA && video.videoWidth > 0) {
+    canvas.width  = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    const img  = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const code = jsQR(img.data, img.width, img.height, { inversionAttempts: 'dontInvert' });
+    if (code && code.data && code.data.trim()) {
+      stopCamera();
+      switchTab('manual');
+      document.getElementById('ticket-input').value = code.data.trim();
+      handleSearch();
+      return;
+    }
+  }
+  requestAnimationFrame(scanFrame);
+}
+
+async function apiCall(params) {
+  const url = API_URL + '?' + new URLSearchParams(params);
+  const res  = await fetch(url);
+  return res.json();
+}
+
+async function loadStats() {
+  try {
+    const d = await apiCall({ action: 'stats' });
+    document.getElementById('cnt-total').textContent = d.total.toLocaleString('id');
+    document.getElementById('cnt-in').textContent    = d.checkedIn.toLocaleString('id');
+    document.getElementById('cnt-rem').textContent   = d.remaining.toLocaleString('id');
+  } catch(e) {}
+}
+
+async function handleSearch() {
+  const code = document.getElementById('ticket-input').value.trim().toUpperCase();
+  if (!code) return;
+  const box = document.getElementById('result-box');
+  box.style.display = 'block';
+  box.className = 'result';
+  box.innerHTML = '<div class="loading">🔍 Mencari...</div>';
+  box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+  const d = await apiCall({ action: 'lookup', code });
+
+  if (d.status === 'not_found') {
+    box.className = 'result error';
+    box.innerHTML = '<div class="r-title r">✕ Tiket tidak ditemukan</div>' +
+      '<div style="font-size:15px;color:var(--red)">Kode <code>' + code + '</code> tidak ada di database.</div>';
+    return;
+  }
+  if (d.checkedIn) {
+    box.className = 'result warning';
+    box.innerHTML = '<div class="r-title a">⚠️ Sudah check-in sebelumnya</div>' +
+      row('Nama', d.name) + row('Tiket', badge(d.ticketType)) + row('Waktu masuk', d.checkedInTime);
+    return;
+  }
+  box.className = 'result success';
+  box.innerHTML = '<div class="r-title g">✓ Peserta ditemukan</div>' +
+    row('Nama', d.name) + row('Email', d.email) +
+    row('No. HP', d.phone) + row('Jabatan', d.jabatan) +
+    row('Jenis Tiket', badge(d.ticketType)) +
+    '<button class="btn-checkin" onclick="confirmCheckin(\'' + esc(code) + '\',\'' + esc(d.name) + '\',\'' + esc(d.ticketType) + '\')">✓ Konfirmasi Check-in</button>';
+}
+
+async function confirmCheckin(code, name, ticketType) {
+  const box = document.getElementById('result-box');
+  box.innerHTML = '<div class="loading">⏳ Memproses...</div>';
+  const d = await apiCall({ action: 'checkin', code });
+  if (d.status === 'success') {
+    box.className = 'result success';
+    box.innerHTML = '<div class="r-title g">✓ Check-in berhasil!</div>' +
+      row('Nama', d.name) + row('Waktu masuk', d.checkedInTime);
+    recentList.unshift({ name, code, time: (d.checkedInTime||'').split(' ')[1] || d.checkedInTime, ticket: ticketType });
+    if (recentList.length > 5) recentList.pop();
+    renderRecent();
+    loadStats();
+    document.getElementById('ticket-input').value = '';
+  } else {
+    box.className = 'result warning';
+    box.innerHTML = '<div class="r-title a">⚠️ ' + d.message + '</div>';
+  }
+}
+
+function row(k, v) {
+  return '<div class="info-row"><span class="ik">' + k + '</span><span class="iv">' + v + '</span></div>';
+}
+function badge(t) { return '<span class="badge">' + (t||'-') + '</span>'; }
+function esc(s)   { return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
+
+function renderRecent() {
+  if (!recentList.length) return;
+  document.getElementById('recent-list').innerHTML = recentList.map(r =>
+    '<div class="recent-item">' +
+    '<div><div class="r-name">' + r.name + '</div><div class="r-code">' + r.code + '</div></div>' +
+    '<div><div class="r-time">' + r.time + '</div>' + badge(r.ticket) + '</div>' +
+    '</div>'
+  ).join('');
+}
+
+document.getElementById('ticket-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') handleSearch();
+});
+
+loadStats();
+setInterval(loadStats, 30000);
+</script>
+</body>
+</html>
